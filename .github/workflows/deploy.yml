@@ -7,17 +7,39 @@ on:
     branches:
       - main
 
-permissions:
-  pull-requests: write
-
 jobs:
-  deploy:
+  deploy_or_skip:
     # no-deploy ラベルがあればデプロイをしない
-    if: github.event.pull_request.merged == true && !contains(github.event.pull_request.labels.*.name, 'no-deploy')
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write
+      contents: read
+
     steps:
       - name: checkout
         run: echo 'check out ok'
-      - name: deploy
+
+
+      - name: Comment on PR (Skip Deploy)
+        if: contains(github.event.pull_request.labels.*.name, 'no-deploy')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          gh pr comment "$PR_URL" --body "\`no-deploy\` ラベルがあったためデプロイをスキップしました"
+
+      - name: Run deploy
+        if: "!contains(github.event.pull_request.labels.*.name, 'no-deploy')"
         run: echo 'deploy ok'
+
+      - name: Comment on PR (Deploy Success)
+        if: "!contains(github.event.pull_request.labels.*.name, 'no-deploy') && success()"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          gh pr comment "$PR_URL" --body "デプロイしました"
+      
 
