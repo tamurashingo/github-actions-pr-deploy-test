@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        run: echo "check out: ok"
+        run: echo 'check out: ok'
       - name: deploy
-        run: echo "deploy: ok"
+        run: echo 'deploy: ok'
 
