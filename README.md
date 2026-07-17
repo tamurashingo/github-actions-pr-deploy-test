@@ -14,3 +14,6 @@ no-deploy ラベルを付けずにPRを作る
 
 test-7
 no-deploy ラベルを付けてPRを作る
+
+test-8
+ラベルを付けたり外したりのテスト
