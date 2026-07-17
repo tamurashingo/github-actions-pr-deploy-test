@@ -1,7 +1,9 @@
 name: deploy
 
+# PRがクローズされたときに動くように変更
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
       - main
 
