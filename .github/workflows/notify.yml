@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: comment when labeled
-        if: github.event.actions == 'labeled'
+        if: github.event.action == 'labeled'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_URL: ${{ github.event.pull_request.html_url }}
@@ -23,7 +23,7 @@ jobs:
 
 
       - name: comment when unlabeled
-        if: github.event.actions == 'unlabeled'
+        if: github.event.action == 'unlabeled'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_URL: ${{ github.event.pull_request.html_url }}
