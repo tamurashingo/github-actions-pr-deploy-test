@@ -1,0 +1,32 @@
+name: Notify Deploy Status
+
+on:
+  pull_request:
+    types: [labeled, unlabeled]
+
+jobs:
+  comment:
+    if: github.event.label.name == 'no-deploy'
+    runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: comment when labeled
+        if: github.event.actions == 'labeled'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run:
+          gh pr comment "$PR_URL" --body "\`no-deploy\` ラベルが付いたのでデプロイをスキップします"
+
+
+      - name: comment when unlabeled
+        if: github.event.actions == 'unlabeled'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run:
+          gh pr comment "$PR_URL" --body "\`no-deploy\` ラベルが外れたのでデプロイ予定です"
+
