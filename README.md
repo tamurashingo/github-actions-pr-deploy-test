@@ -12,3 +12,5 @@ no-deploy ラベルを付けてPRを作る
 test-6
 no-deploy ラベルを付けずにPRを作る
 
+test-7
+no-deploy ラベルを付けてPRを作る
